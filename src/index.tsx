@@ -7,7 +7,7 @@ interface Props {
   value: Players
 }
 
-type Players = "X" | "O" | null;
+type Players = "X" | "O";
 
 interface State {
   squares: Array<Players>,
@@ -40,8 +40,17 @@ class Board extends React.Component<{}, State> {
   handleClick(i: number) {
     console.log('clicked ' + i)
     const squares = this.state.squares.slice();
-    squares[i] = 'X';
-    this.setState({ squares: squares })
+    squares[i] = this.state.nextPlayer === 'X' ? "X" : "O";
+
+    let nextPlayer: Players;
+    if (this.state.nextPlayer === 'X') {
+      nextPlayer = 'O';
+    } else {
+      nextPlayer = 'X';
+    }
+
+    this.setState({ squares: squares, nextPlayer: nextPlayer })
+
   }
 
 
@@ -56,11 +65,9 @@ class Board extends React.Component<{}, State> {
   }
 
   render() {
-    const status = 'Next player: X';
-
     return (
       <div>
-        <div className="status" > {status} </div>
+        <div className="status" > Next player: {this.state.nextPlayer}</div>
         <div className="board-row" >
           {this.renderSquare(0)}
           {this.renderSquare(1)}
