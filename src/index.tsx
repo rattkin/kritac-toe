@@ -41,22 +41,23 @@ class Board extends React.Component<{}, State> {
 
   handleClick(i: number) {
     console.log('clicked ' + i)
+    const squares = this.state.squares.slice();
 
-    if (!calculateWinner(this.state.squares)) {
-
-      const squares = this.state.squares.slice();
-      squares[i] = this.state.nextPlayer === 'X' ? "X" : "O";
-
-      let nextPlayer: Players;
-      if (this.state.nextPlayer === 'X') {
-        nextPlayer = 'O';
-      } else {
-        nextPlayer = 'X';
-      }
-
-      this.setState({ squares: squares, nextPlayer: nextPlayer })
+    // stop play if winner is already declared or the square is already filled
+    if (calculateWinner(squares) || squares[i]) {
+      return;
     }
 
+    squares[i] = this.state.nextPlayer === 'X' ? "X" : "O";
+
+    let nextPlayer: Players;
+    if (this.state.nextPlayer === 'X') {
+      nextPlayer = 'O';
+    } else {
+      nextPlayer = 'X';
+    }
+
+    this.setState({ squares: squares, nextPlayer: nextPlayer })
   }
 
 
